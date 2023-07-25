@@ -37,3 +37,25 @@
       bootcmd:
         - dracut --force
   when: ansible_os_family == "RedHat"
+
+# Remove this when https://github.com/canonical/cloud-init/pull/4281 is merged and released
+- name: fix cloud-init on Ubuntu if multiple datasources (including CloudStack) are passed
+  get_url:
+    url: "https://raw.githubusercontent.com/weizhouapache/cloud-init/8f1ecba5e0e7aaf187ad8258614661a2d957caab/tools/ds-identify"
+    dest: /usr/lib/cloud-init/ds-identify
+    force: yes
+    mode: 0755
+    owner: root
+    group: root
+  when: ansible_os_family == "Debian"
+
+- name: fix cloud-init on Rocky if multiple datasources (including CloudStack) are passed
+  get_url:
+    url: "https://raw.githubusercontent.com/weizhouapache/cloud-init/8f1ecba5e0e7aaf187ad8258614661a2d957caab/tools/ds-identify"
+    dest: /usr/libexec/cloud-init/ds-identify
+    force: yes
+    mode: 0755
+    owner: root
+    group: root
+  when: ansible_os_family == "RedHat"
+
